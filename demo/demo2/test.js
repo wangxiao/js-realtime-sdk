@@ -7,6 +7,9 @@ var roomId = '551a2847e4b04d688d73dc54';
 // 每个客户端自定义的 id
 var clientId = 'LeanCloud';
 
+// 服务器端认证地址
+// var authUrl = 'http://yourdomain/xxx/xx';
+
 // 用来存储 realtimeObject
 var rt;
 
@@ -52,6 +55,19 @@ function main() {
         rt.close();
     }
 
+    // 服务器端认证函数
+    function AuthFun(param, callback) {
+        var data = {};
+        data = param;
+
+        AV.realtime._tool.ajax({
+            url: authUrl,
+            method: 'post',
+            form: true,
+            data: data
+        }, callback);
+    }
+    
     // 创建实时通信实例
     rt = AV.realtime({
         appId: appId,
@@ -62,6 +78,8 @@ function main() {
         // 如果真正使用在生产环境，建议不要关闭 secure，具体阅读文档
         // secure 设置为 true 是开启
         secure: false
+        // 是否开启服务器端认证
+        // auth: AuthFun
     });
 
     // 监听连接成功事件
